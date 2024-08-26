@@ -32,8 +32,6 @@ ds_seaice_maxseaice = ds_seaice.isel(nCells=idx_maxseaice)
 ds_ocean_maxseaice = ds_ocean.isel(nCells=idx_maxseaice)
 
 ds_abort_maxseaice = ds_abort.isel(nCells=idx_maxseaice, Time=-1)
-print(f'lat, lon = {ds_abort_maxseaice["latCell"].values*180./np.pi},'
-      f'{ds_abort_maxseaice["lonCell"].values*180./np.pi}')
 print(f'P sea ice = {ds_abort_maxseaice["icePressure"].values} N/m')
 print(f'div = {ds_abort_maxseaice["divergence"].values} %/day')
 #print(f'div = {ds_seaice_maxseaice["divergence"].values[-10:]} %/day')
@@ -46,20 +44,24 @@ print(f'tend sea ice lateral melt = {ds_abort_maxseaice["lateralIceMelt"].values
 #print(f'tau atm v = {ds_abort_maxseaice[""].values} m/s')
 
 ds_init_maxseaice = ds_init.isel(Time=0, nCells=idx_maxseaice)
-cellsOnCell = ds_init_maxseaice['cellsOnCell'].values
+cellsOnCell = ds_init_maxseaice['cellsOnCell'].values - 1
+cellsOnCell = cellsOnCell[cellsOnCell>-1]
 bottomDepth = ds_init_maxseaice["bottomDepth"]
-print(f'bottomDepth = {bottomDepth.values}')
-print(f'maxLevelCell = {ds_init_maxseaice["maxLevelCell"].values}')
-print(f"landIceFraction = {ds_init_maxseaice['landIceFraction'].values}")
-print(f"landIceDraft = {ds_init_maxseaice['landIceDraft'].values}")
-print(f"landIceFloatingMask = {ds_init_maxseaice['landIceFloatingMask'].values}")
-print(f"nEdges = {ds_init_maxseaice['nEdgesOnCell'].values}")
+#print(f'cellsOnCell = {cellsOnCell}')
+print(f'lat, lon = {ds_abort_maxseaice["latCell"].values*180./np.pi},'
+      f'{ds_abort_maxseaice["lonCell"].values*180./np.pi}')
 print(f"latNeighbor = {ds_init['latCell'].values[cellsOnCell] * 180/np.pi}")
 print(f"lonNeighbor = {ds_init['lonCell'].values[cellsOnCell] * 180/np.pi}")
-print(f"landIceDraftNeighbor = {ds_init['landIceDraft'].values[0, cellsOnCell]}")
+print(f"nEdges = {ds_init_maxseaice['nEdgesOnCell'].values}")
+print(f'bottomDepth = {bottomDepth.values}')
 print(f"bottomDepthNeighbor = {ds_init['bottomDepth'].values[cellsOnCell]}")
-print(f"landIceFloatingMaskNeighbor = {ds_init['landIceFloatingMask'].values[0, cellsOnCell]}")
+print(f'maxLevelCell = {ds_init_maxseaice["maxLevelCell"].values}')
 print(f"maxLevelCellNeighbor = {ds_init['maxLevelCell'].values[cellsOnCell]}")
+print(f"landIceFraction = {ds_init_maxseaice['landIceFraction'].values}")
+print(f"landIceDraft = {ds_init_maxseaice['landIceDraft'].values}")
+print(f"landIceDraftNeighbor = {ds_init['landIceDraft'].values[0, cellsOnCell]}")
+print(f"landIceFloatingMask = {ds_init_maxseaice['landIceFloatingMask'].values}")
+print(f"landIceFloatingMaskNeighbor = {ds_init['landIceFloatingMask'].values[0, cellsOnCell]}")
 
 print(f"max H sea ice = {iceThicknessCell.isel(nCells=idx_maxseaice).values}")
 
